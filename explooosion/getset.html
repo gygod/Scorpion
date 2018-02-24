@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>getset</title>
+  </head>
+  <body>
+    <div id="test">
+      <p>{{msg}}</p>
+      <p s-value="msg"></p>
+    </div>
+    <script>
+  			var bindingMark = 'data-element-binding'
+  			function Scorpion (id, initData) {
+  
+  				var self = this
+  				var el = self.el = typeof id === 'string' ? document.getElementById(id) : id
+  				var bindings = {}
+          var data = self.data = {}
+  				var content  = el.innerHTML.replace(/\{\{(.*)\}\}/g, markToken)
+  
+  				el.innerHTML = content
+  
+  				for (var variable in bindings) {
+  					bind(variable)
+  				}
+  
+  				if (initData) {
+  					for (var variable in initData) {
+  						data[variable] = initData[variable]
+  					}
+  				}
+  
+  				function markToken (match, variable) {
+  					bindings[variable] = {}
+  					return '<span ' + bindingMark + '="' + variable +'"></span>'
+  				}
+  
+  				function bind (variable) {
+  					bindings[variable].els = el.querySelectorAll('[' + bindingMark + '="' + variable + '"]')
+  				    ;[].forEach.call(bindings[variable].els, function (e) {
+  				        e.removeAttribute(bindingMark)
+  				    })
+  					Object.defineProperty(data, variable, {
+  						set: function (newVal) {
+  						    [].forEach.call(bindings[variable].els, function (e) {
+  						        bindings[variable].value = e.textContent = newVal
+  						    })
+  						},
+  						get: function () {
+  						    return bindings[variable].value
+  						}
+  					})
+  				}
+  			}
+  			
+  			var app = new Scorpion('test', {
+  				msg: 'hello'
+  			})
+  
+  		</script>
+  </body>
+</html>
