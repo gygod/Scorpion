@@ -7,12 +7,16 @@
   </head>
   <body>
     <div id="app">
-      <p>{{msg}}</p>       <!-- Hello World -->
+      <p>{{ msg }}</p>     <!-- Hello World -->
+      <p>{{ put }}</p>
+      <p s-value="weigo"></p>
     </div>
     <script>
       var app = new scorpion('app', {
-        msg: 'Hello World'
-      })
+        msg: 'Hello World',
+        put: '<span style="color:red;">red</span>', //useless
+        weigo: 'weigo' 
+      })  
     </script>
   </body>
 </html>
